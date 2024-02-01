@@ -12,6 +12,27 @@ public class EmailReader {
     private final String user;
     private final String password;
 
+    // Como argumentos se debe poner localhost prueba prueba.
+    // Es necesario tener configurado el servidor POP3 y SMTP de Mercury
+    // y el usuario prueba con contraseña prueba creado.
+    public static void main(String[] args) {
+        if (args.length < 3) {
+            System.out.println("Usage: java EmailReader <server> <user> <password>");
+            return;
+        }
+
+        String server = args[0];
+        String user = args[1];
+        String password = args[2];
+
+        EmailReader reader = new EmailReader(server, user, password);
+        try {
+            reader.readEmails();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public EmailReader(String server, String user, String password) {
         this.server = server;
         this.user = user;
@@ -52,21 +73,5 @@ public class EmailReader {
         }
     }
 
-    public static void main(String[] args) {
-        if (args.length < 3) {
-            System.out.println("Usage: java EmailReader <server> <user> <password>");
-            return;
-        }
 
-        String server = args[0];
-        String user = args[1];
-        String password = args[2];
-
-        EmailReader reader = new EmailReader(server, user, password);
-        try {
-            reader.readEmails();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

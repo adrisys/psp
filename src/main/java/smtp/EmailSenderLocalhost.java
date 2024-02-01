@@ -4,6 +4,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+/**
+ * Aqui se mandan 10 correos a prueba@localhost desde admin@localhost.
+ * Es necesario tener un servidor SMTP en localhost y los usuarios creados,
+ * en mi caso he usado Mercury de XAMPP.
+ */
 public class EmailSenderLocalhost {
     public static void main(String[] args) {
         String to = "prueba@localhost"; // destinatario

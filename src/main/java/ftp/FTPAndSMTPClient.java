@@ -1,11 +1,6 @@
 package ftp;
-import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.smtp.AuthenticatingSMTPClient;
-import org.apache.commons.net.smtp.SMTPReply;
-import org.apache.commons.net.smtp.SimpleSMTPHeader;
 import pop3.EmailReader;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -18,6 +13,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.Scanner;
 
+// Este programa hace uso de los mismos servidores y usuarios creados con Mercury.
 public class FTPAndSMTPClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -102,8 +98,8 @@ private static void sendEmail(int successfulLogins) {
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
         // Establece el asunto y el cuerpo del mensaje
-        message.setSubject("Mensaje de prueba");
-        message.setText("Este es el mensaje de prueba");
+        message.setSubject("Numero de usuarios logeados");
+        message.setText("Se han logeado " + successfulLogins + " usuarios.");
 
         // Envia el mensaje
         Transport.send(message);
