@@ -1,9 +1,10 @@
 package smtp;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
+
 import java.util.Scanner;
 
 public class EmailSender {
@@ -46,30 +47,31 @@ public class EmailSender {
     }
 
     private static void sendEmail(String smtpServer, boolean tls, String port, String username, String password, String from, String to, String subject, String text) {
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", String.valueOf(tls));
-        props.put("mail.smtp.host", smtpServer);
-        props.put("mail.smtp.port", port);
-
-        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
-
         try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            message.setSubject(subject);
-            message.setText(text);
+            System.out.println("Estableciendo la sesión con el servidor SMTP...");
+            Email email = new SimpleEmail(); // crea un objeto Email
+            email.setHostName(smtpServer); // establece el servidor SMTP
+            email.setSmtpPort(Integer.parseInt(port)); // establece el puerto
+            email.setAuthenticator(new DefaultAuthenticator(username, password)); // establece el usuario y la contraseña
+            email.setSSLOnConnect(tls); // establece si se usa TLS
+            email.setFrom(from); // establece el remitente
+            email.setSubject(subject); // establece el asunto
+            email.setMsg(text); // establece el mensaje
+            email.addTo(to); // establece el destinatario
+            System.out.println("La sesión con el servidor SMTP se ha establecido correctamente.");
 
-            Transport.send(message);
+            if (text.isEmpty()) {
+                System.err.println("El mensaje está vacío. No se puede enviar un mensaje vacío.");
+                return;
+            }
 
+            System.out.println("Preparando para enviar el mensaje...");
+            System.out.println("Enviando el mensaje...");
+            email.send();
             System.out.println("Mensaje enviado correctamente");
 
-        } catch (MessagingException e) {
+        } catch (EmailException e) {
+            System.out.println("Error al enviar el mensaje: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
