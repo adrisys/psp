@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class EmailSender {
     public static void main(String[] args) {
+        // Lee los datos para enviar el correo
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Introduce el servidor SMTP:");
@@ -42,7 +43,7 @@ public class EmailSender {
         while (!(line = scanner.nextLine()).equals("*")) {
             messageText.append(line).append("\n");
         }
-
+        // Envía el correo
         sendEmail(smtpServer, tls, port, username, password, from, to, subject, messageText.toString());
     }
 
